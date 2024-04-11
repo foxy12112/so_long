@@ -1,13 +1,18 @@
-#include "libs/MLX42/include/MLX42/MLX42.h"
-#include "libs/libft/libft.h"
-#include "libs/ft_printf/ft_printf.h"
+#include "MLX42/include/MLX42/MLX42.h"
+
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
 
 int	main(void)
 {
 	void	*mlx;
-	void	*mlx_win;
+	t_data	img;
 
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
+	mlx = mlx_init(1920, 1080, "MLX", 0);
 	mlx_loop(mlx);
 }
