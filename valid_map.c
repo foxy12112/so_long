@@ -6,7 +6,7 @@
 /*   By: ldick <ldick@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:28:13 by ldick             #+#    #+#             */
-/*   Updated: 2024/04/18 20:53:12 by ldick            ###   ########.fr       */
+/*   Updated: 2024/04/20 03:32:38 by ldick            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,21 @@ int check_rectangle(t_vars * vars, char *map)
 	vars->x = 0;
 	fd = open(map, O_RDONLY);
 	line = get_next_line(fd);
-	vars->x1 = ft_strlen(line);
+	vars->x1 = ft_strlen_no_nl(line);
 	while(line != NULL)
 	{
-		vars->x += ft_strlen(line);
+		vars->x += ft_strlen_no_nl(line);
 		vars->y++;
-		vars->x2 = ft_strlen(line); 
+		vars->x2 = ft_strlen_no_nl(line); 
 		free(line);
 		line = get_next_line(fd);
 		if(vars->x1 != vars->x2)
-			perror("lines differ in lenght");
+			ERROR_AND_RETURN("lines differ in lenght", 1);
 	}
 	close(fd);
-	if (vars->x/vars->y != vars->x1)
-		perror("not rectangle");
+	if (vars->x1 == vars->y)
+		ERROR_AND_RETURN("not a rectangle", 1);
+	printf("x=%f----y=%f", vars->x1, vars->y);
 	return (0);
 }
 void read_map_file(t_vars *vars, char *map)
@@ -66,16 +67,12 @@ void read_map_file(t_vars *vars, char *map)
 
 	file = open(map, O_RDONLY);
 	if (file == -1)
-	{
-		perror("error opening file");
-		return;
-	}
+		ft_printf("error opening file");
 	bytes_read = read(file, vars->buffer, 1024);
 	if (bytes_read == -1)
 	{
 		close(file);
-		perror("error reading file");
-		return;
+		ft_printf("error reading file");
 	}
 	vars->buffer[bytes_read] = '\0';
 }
@@ -100,15 +97,46 @@ int check_characters(t_vars *vars, char *map)
 	return (0);
 }
 
+int check_C_P_E(char *map)
+{
+	int i;
+	int P;
+	int C;
+	int E;
+
+	i = 0;
+	while (map[i])
+	{
+		if (map[i] == 'P')
+			P++;
+		if (map[i] == 'C')
+			C++;
+		if (map[i] == 'E')
+			E++;
+		i++;
+	}
+	if (C < 1)
+		ft_printf("no collectibles");
+	if (P != 1)
+		ft_printf("more or less than 1 Player found");
+	if (E != 1)
+		ft_printf("more or less than 1 Exit found");
+	if (E != 1 || C < 1 | P != 1)
+		ERROR_AND_RETURN("wrong variables", 1);
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_vars *vars = malloc(sizeof(t_vars));
 	char		*line;
 	int			fd;
 	
-	
+	vars.buffer = read_map_file(vars, argv[1]);
+	printf("%s\n", vars->buffer);
 	printf("%d\n", map_extension(argv[1]));
 	printf("%d\n", check_rectangle(vars, argv[1]));
+	check_C_P_E(vars->buffer);
 	check_characters(vars, argv[1]);
 	return (0);
 }
