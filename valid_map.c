@@ -6,7 +6,7 @@
 /*   By: ldick <ldick@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:28:13 by ldick             #+#    #+#             */
-/*   Updated: 2024/04/20 03:32:38 by ldick            ###   ########.fr       */
+/*   Updated: 2024/04/20 19:21:23 by ldick            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,31 +99,28 @@ int check_characters(t_vars *vars, char *map)
 
 int check_C_P_E(char *map)
 {
-	int i;
-	int P;
-	int C;
-	int E;
+    int i;
+    int P;
+    int C;
+    int E;
 
-	i = 0;
-	while (map[i])
-	{
-		if (map[i] == 'P')
-			P++;
-		if (map[i] == 'C')
-			C++;
-		if (map[i] == 'E')
-			E++;
-		i++;
-	}
-	if (C < 1)
-		ft_printf("no collectibles");
-	if (P != 1)
-		ft_printf("more or less than 1 Player found");
-	if (E != 1)
-		ft_printf("more or less than 1 Exit found");
-	if (E != 1 || C < 1 | P != 1)
-		ERROR_AND_RETURN("wrong variables", 1);
-	return (0);
+    P = 0;
+    C = 0;
+    E = 0;
+    i = 0;
+    while (map[i])
+    {
+        if (map[i] == 'P')
+            P++;
+        if (map[i] == 'C')
+            C++;
+        if (map[i] == 'E')
+            E++;
+        i++;
+    }
+    if (E != 1 || C < 1 || P != 1)
+        printf("wrong variables");
+    return (0);
 }
 
 int	main(int argc, char *argv[])
@@ -132,7 +129,7 @@ int	main(int argc, char *argv[])
 	char		*line;
 	int			fd;
 	
-	vars.buffer = read_map_file(vars, argv[1]);
+	read_map_file(vars, argv[1]);
 	printf("%s\n", vars->buffer);
 	printf("%d\n", map_extension(argv[1]));
 	printf("%d\n", check_rectangle(vars, argv[1]));
