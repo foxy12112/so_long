@@ -6,7 +6,7 @@
 /*   By: ldick <ldick@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 22:15:29 by ldick             #+#    #+#             */
-/*   Updated: 2024/04/22 05:56:46 by ldick            ###   ########.fr       */
+/*   Updated: 2024/04/22 20:08:12 by ldick            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ char	make_copy(char *map)
 
 int	turn_to_matrix(t_vars *vars, char *map)
 {
-	int		col;
-	int		row;
-	int		i;
+	int	x;
+	int	y;
+	char **map;
 
-	col = vars->y;
-	row = vars->x1;
-	printf("%d--%d", row, col);
+	map[x][y] =  
 }
 
 void	flood(char **matrix_cp, int p_col, int p_row)
