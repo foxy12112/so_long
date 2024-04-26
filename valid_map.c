@@ -6,7 +6,7 @@
 /*   By: ldick <ldick@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:28:13 by ldick             #+#    #+#             */
-/*   Updated: 2024/04/22 05:49:34 by ldick            ###   ########.fr       */
+/*   Updated: 2024/04/26 04:35:27 by ldick            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int	map_extension(char *name)
 	i = ft_strlen(name);
 	if (name[i - 1] != 'r' || name[i - 2] != 'e' || name[i - 3] != 'b'
 		|| name[i - 4] != '.')
-		perror("wrong extension");
+	{
+		ft_printf("wrong extension\n");
+		return (1);
+	}
 	return (0);
 }
 
@@ -42,11 +45,11 @@ int	check_rectangle(t_vars *vars, char *map)
 		free(line);
 		line = get_next_line(fd);
 		if (vars->x1 != vars->x2)
-			return (4);
+			ft_printf("lines differ in lenght\n");
 	}
 	close(fd);
 	if (vars->x1 == vars->y)
-		return (5);
+		ft_printf("map is square\n");
 	return (0);
 }
 
@@ -57,12 +60,16 @@ void	read_map_file(t_vars *vars, char *map)
 
 	file = open(map, O_RDONLY);
 	if (file == -1)
-		ft_printf("error opening file");
+	{
+		ft_printf("error opening files\n");
+		return (1);
+	}
 	bytes_read = read(file, vars->buffer, 1024);
 	if (bytes_read == -1)
 	{
 		close(file);
-		ft_printf("error reading file");
+		ft_printf("error reading map\n");
+		return (1);
 	}
 	vars->buffer[bytes_read] = '\0';
 }
@@ -79,7 +86,7 @@ int	check_characters(t_vars *vars, char *map)
 			&& vars->buffer[i] != 'P' && vars->buffer[i] != 'C'
 			&& vars->buffer[i] != 'E' && vars->buffer[i] != '\n')
 		{
-			ft_printf("non-allowed character present at %d", i, map);
+			ft_printf("unknown character present");
 			return (1);
 		}
 		i++;
@@ -108,21 +115,9 @@ int	check_c_p_e(char *map)
 			e++;
 		i++;
 	}
-	if (e != 1 || c < 1 || p != 1)
-		ft_printf("wrong variables");
+	if (e != 1 || p != 1)
+		ft_printf("Exit or Player amount invalid");
+	if (c == 0)
+		ft_printf("no collectibles found");
 	return (0);
 }
-
-// int	main(int argc, char *argv[])
-// {
-// 	t_vars	*vars;
-
-// 	vars = malloc(sizeof(t_vars));
-// 	read_map_file(vars, argv[1]);
-// 	check_rectangle(vars, argv[1]);
-// 	printf("%d\n", vars->x1);
-// 	printf("%d\n", vars->y);
-// 	make_copy(vars->buffer);
-// 	printf("%s\n", vars->buffer);
-// 	return (0);
-// }
